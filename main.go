@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 func contains(toSearch []string, query string) bool {
@@ -41,55 +41,55 @@ func gatherFiles() []string {
 }
 
 type Todo struct {
-    content string
-    lineNum string
+	content string
+	lineNum string
 }
 
 type FileResult struct {
-    filename string
-    todos []Todo
+	filename string
+	todos    []Todo
 }
 
 func scan(files []string) []FileResult {
-    pattern := `(?i)^\s*(//|\*|#)\s*todo:`
-    re := regexp.MustCompile(pattern)
-    results := []FileResult{}
-    for _, filename := range files {
-	shouldCapture := false
-	result := FileResult{
-	    filename: filename,
-	    todos: []Todo{},
-	}
-	dat, _ := os.ReadFile(filename)
-	contents := string(dat)
-	for idx, line := range strings.Split(contents, "\n") {
-	    lower := strings.ToLower(line)
-	    if (re.MatchString(lower)) {
-		tidiedTodo := re.ReplaceAllString(line, "")
-		tidiedTodo = strings.TrimSpace(tidiedTodo)
-		// todo: trim line and remove leading "todo:"
-		result.todos = append(result.todos, Todo{
-		    content: tidiedTodo,
-		    lineNum: strconv.Itoa(idx + 1),
-		})
-		shouldCapture = true
-	    }
-	}
+	pattern := `(?i)^\s*(//|\*|#)\s*todo:`
+	re := regexp.MustCompile(pattern)
+	results := []FileResult{}
+	for _, filename := range files {
+		shouldCapture := false
+		result := FileResult{
+			filename: filename,
+			todos:    []Todo{},
+		}
+		dat, _ := os.ReadFile(filename)
+		contents := string(dat)
+		for idx, line := range strings.Split(contents, "\n") {
+			lower := strings.ToLower(line)
+			if re.MatchString(lower) {
+				tidiedTodo := re.ReplaceAllString(line, "")
+				tidiedTodo = strings.TrimSpace(tidiedTodo)
+				// todo: trim line and remove leading "todo:"
+				result.todos = append(result.todos, Todo{
+					content: tidiedTodo,
+					lineNum: strconv.Itoa(idx + 1),
+				})
+				shouldCapture = true
+			}
+		}
 
-	if shouldCapture {
-	    results = append(results, result)
+		if shouldCapture {
+			results = append(results, result)
+		}
 	}
-    }
-    return results
+	return results
 }
 
 func printResults(results []FileResult) {
-    for _, result := range results {
-	fmt.Printf("%s:\n", result.filename)
-	for _, todo := range result.todos {
-	    fmt.Printf("  %s: %s\n", todo.lineNum, todo.content)
+	for _, result := range results {
+		fmt.Printf("%s:\n", result.filename)
+		for _, todo := range result.todos {
+			fmt.Printf("  %s: %s\n", todo.lineNum, todo.content)
+		}
 	}
-    }
 }
 
 func main() {
