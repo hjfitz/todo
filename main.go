@@ -107,6 +107,10 @@ func scan(files []string) []FileResult {
 }
 
 func printResults(results []FileResult) {
+	if len(results) == 0 {
+		fmt.Println("Nothing to do!")
+		return
+	}
 	for _, result := range results {
 		fmt.Fprintf(os.Stdout, "\033[1m%s\033[0m:\n", result.filename)
 		for _, todo := range result.todos {
