@@ -1,6 +1,10 @@
-# TODO
+# todo
 
 `todo` is a Go-based command-line tool that scans your project for all TODO comments and generates a neat TODO list. It automatically ignores directories like `node_modules` and `.git`.
+
+I'm sick at the time of writing this, so my mental state is degraded and my give-a-shit level is low.
+
+I'm using this as an opportunity to teach myself programming agin, in a way. Because of this mental state, I' m more able to [write code like it's my first time](https://prog21.dadgum.com/87.html) and focus on shipping, rather than beautiful software.
 
 ## Features
 
