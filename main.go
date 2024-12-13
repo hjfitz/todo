@@ -19,9 +19,34 @@ func contains(toSearch []string, query string) bool {
 	return false
 }
 
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	return !os.IsNotExist(err)
+}
+
+func getIgnoredFiles() []string {
+	ignoredList := []string{}
+	// check if gitignore exists and read that
+	if fileExists(".gitignore") {
+		raw, _ := os.ReadFile(".gitignore")
+		contents := string(raw)
+		for _, filename := range strings.Split(contents, "\n") {
+			if len(strings.TrimSpace(filename)) == 0 || filename[0] == '#' {
+				continue
+			}
+			ignoredList = append(ignoredList, strings.Trim(filename, "/\\"))
+		}
+	}
+
+	// todo: check for ~/.config/todo.conf and load that
+
+	return ignoredList
+}
+
 func gatherFiles() []string {
-	// todo: make this configurable
-	toSkip := []string{"node_modules", ".git"}
+	// todo: make this configurable, and read from gitignore
+	toSkip := []string{".git"}
+	toSkip = append(toSkip, getIgnoredFiles()...)
 	cwd, _ := os.Getwd()
 	toScan := []string{}
 	_ = filepath.Walk(cwd, func(path string, info fs.FileInfo, err error) error {
