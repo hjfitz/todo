@@ -108,7 +108,7 @@ func scan(files []string) []FileResult {
 
 func printResults(results []FileResult) {
 	for _, result := range results {
-		fmt.Printf("%s:\n", result.filename)
+		fmt.Fprintf(os.Stdout, "\033[1m%s\033[0m:\n", result.filename)
 		for _, todo := range result.todos {
 			fmt.Printf("  %s: %s\n", todo.lineNum, todo.content)
 		}
