@@ -12,7 +12,7 @@ import (
 
 func contains(toSearch []string, query string) bool {
 	for _, val := range toSearch {
-		if val == query {
+		if strings.Contains(query, val) {
 			return true
 		}
 	}
@@ -21,7 +21,7 @@ func contains(toSearch []string, query string) bool {
 
 func gatherFiles() []string {
 	// todo: make this configurable
-	toSkip := []string{"node_modules/", ".git"}
+	toSkip := []string{"node_modules", ".git"}
 	cwd, _ := os.Getwd()
 	toScan := []string{}
 	_ = filepath.Walk(cwd, func(path string, info fs.FileInfo, err error) error {
