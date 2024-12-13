@@ -44,7 +44,6 @@ func getIgnoredFiles() []string {
 }
 
 func gatherFiles() []string {
-	// todo: make this configurable, and read from gitignore
 	toSkip := []string{".git"}
 	toSkip = append(toSkip, getIgnoredFiles()...)
 	cwd, _ := os.Getwd()
@@ -92,7 +91,6 @@ func scan(files []string) []FileResult {
 			if re.MatchString(lower) {
 				tidiedTodo := re.ReplaceAllString(line, "")
 				tidiedTodo = strings.TrimSpace(tidiedTodo)
-				// todo: trim line and remove leading "todo:"
 				result.todos = append(result.todos, Todo{
 					content: tidiedTodo,
 					lineNum: strconv.Itoa(idx + 1),
